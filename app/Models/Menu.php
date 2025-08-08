@@ -10,7 +10,7 @@ class Menu extends Model
     /** @use HasFactory<\Database\Factories\MenuFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'depth'];
+    protected $fillable = ['name', 'depth', 'owner_id', 'parent_id'];
 
     public function owner()
     {
@@ -22,7 +22,7 @@ class Menu extends Model
         return $this->belongsTo(Parent::class);
     }
 
-    public function child()
+    public function childrens()
     {
         return $this->HasMany(Parent::class);
     }
