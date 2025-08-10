@@ -39,7 +39,7 @@ class MenuRepositoryImplement extends Eloquent implements MenuRepository{
         return $menu->childrens;
     }
 
-    public function createMenu(string $name, string $parentId, int $ownerId)
+    public function createMenu(string $name, ?string $parentId, int $ownerId)
     {
         return $this->model->create([
             'owner_id' => $ownerId,
@@ -48,17 +48,19 @@ class MenuRepositoryImplement extends Eloquent implements MenuRepository{
         ]);
     }
 
-    public function updateMenu(int $id, array $data)
+    public function updateMenu(string $id, string $name)
     {
         $menu = $this->model->find($id);
         if ($menu) {
-            $menu->update($data);
+            $menu->update([
+                'name' => $name,
+            ]);
             return $menu;
         }
         return null;
     }
 
-    public function deleteMenu(int $id)
+    public function deleteMenu(string $id)
     {
         $menu = $this->model->find($id);
         if ($menu) {

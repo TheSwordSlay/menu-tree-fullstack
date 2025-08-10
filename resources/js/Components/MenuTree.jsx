@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, CirclePlus, Trash2 } from 'lucide-react';
+import CreateChildMenuModal from '@/Components/CreateChildMenuModal';
+import DeleteMenuModal from '@/Components/DeleteMenuModal';
 
-const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expandState, setSelectedItem, parentName=null }) => {
-  const hasChildren = menu.children && menu.children.length > 0;
+const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expandState, setSelectedItem, parentName=null, selectedItem }) => {
+  const hasChildren = menu?.children && menu?.children.length > 0;
+  const [showCreateMenuModal, setShowCreateMenuModal] = useState(false);
+
+  const closeCreateMenuModal = () => {
+      setShowCreateMenuModal(false);
+  };
+
+  const [showCreateMenuModalDelete, setShowCreateMenuModalDelete] = useState(false);
+
+  const closeCreateMenuModalDelete = () => {
+      setShowCreateMenuModalDelete(false);
+  };
 
   const [isExpanded, setIsExpanded] = useState(
     () => expandState?.expand === true && hasChildren
@@ -100,15 +113,32 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
           )}
           
           <span className="text-sm text-gray-800 select-none truncate">
-            {menu.name}
+            {menu?.name}
           </span>
+          {selectedItem?.name === menu?.name ? 
+          <>
+            <button 
+              className="ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full text-xs"
+              onClick={(e) => { e.stopPropagation(); setShowCreateMenuModal(true); }}
+              >
+              <CirclePlus size={20}></CirclePlus>
+              </button> 
+                      <button 
+            className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full text-xs"
+            onClick={(e) => { e.stopPropagation(); setShowCreateMenuModalDelete(true); }}
+            >
+            <Trash2 size={20}></Trash2>
+            </button> 
+          </>
+            : ""}
+
         </div>
       </div>
       
       {hasChildren && isExpanded && (
         <div>
-          {menu.children.map((child, index) => {
-            const isChildLast = index === menu.children.length - 1;
+          {menu?.children.map((child, index) => {
+            const isChildLast = index === menu?.children.length - 1;
             const newParentLines = [...parentLines, !isChildLast];
             
             return (
@@ -120,27 +150,40 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
                 parentLines={newParentLines}
                 expandState={expandState}
                 setSelectedItem={setSelectedItem}
-                parentName={menu.name}
+                parentName={menu?.name}
+                selectedItem={selectedItem}
               />
             );
           })}
         </div>
       )}
+              <CreateChildMenuModal
+                  show={showCreateMenuModal}
+                  onClose={closeCreateMenuModal}
+                  parentId={menu?.id}
+              />
+              <DeleteMenuModal
+                  show={showCreateMenuModalDelete}
+                  onClose={closeCreateMenuModalDelete}
+                  id={menu?.id}
+                  setSelectedItem={setSelectedItem}
+              />
     </div>
   );
 };
 
-export default function MenuTree ({ menus = [], expandState, setSelectedItem }) {
+export default function MenuTree ({ menus = [], expandState, setSelectedItem, selectedItem }) {
   return (
     <div className="w-80">
       <div className="p-2">
         {menus.map((menu, index) => (
           <MenuTreeItem 
-            key={`${menu.name}-${index}`} 
+            key={`${menu?.name}-${index}`} 
             menu={menu}
             isLast={index === menus.length - 1}
             expandState={expandState}
             setSelectedItem={setSelectedItem}
+            selectedItem={selectedItem}
           />
         ))}
       </div>

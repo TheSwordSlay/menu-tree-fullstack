@@ -54,7 +54,7 @@ class MenuServiceImplement extends ServiceApi implements MenuService{
         return $this->mainRepository->getMenuByUUID($id);
     }
 
-    public function createMenu(string $name, string $parentId, int $ownerId)
+    public function createMenu(string $name, ?string $parentId, int $ownerId)
     {
         return $this->mainRepository->createMenu($name, $parentId, $ownerId);
     }
@@ -65,9 +65,9 @@ class MenuServiceImplement extends ServiceApi implements MenuService{
         return $this->mainRepository->createMenu($name, $parentId, $ownerId);
     }
 
-    public function updateMenu(string $id, array $data)
+    public function updateMenu(string $id, string $name)
     {
-        return $this->mainRepository->updateMenu($id, $data);
+        return $this->mainRepository->updateMenu($id, $name);
     }
 
     public function deleteMenu(string $id)

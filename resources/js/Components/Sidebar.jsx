@@ -114,30 +114,30 @@ const Sidebar = ({
                   </li>
                 );
               })}
-                                <li>
-                    <Link
-                                href={route('profile.edit')}
-                      className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                        route().current('profile.edit')
-                          ? 'bg-white bg-white text-black'
-                          : 'text-blue-100 hover:bg-white hover:bg-opacity-10 hover:text-white'
-                      }`}
-                    >
-                      <UserPen size={20} color={route().current('profile.edit') ? '#0051AF' : '#FFFFFF'}/>
-                      <span className="font-medium text-sm">Profile</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      method="post"
-                                href={route('logout')}
-                      className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-blue-100 hover:bg-white hover:bg-opacity-10 hover:text-white
-                      `}
-                    >
-                      <LogOut size={20} color={'#FFFFFF'}/>
-                      <span className="font-medium text-sm">LogOut</span>
-                    </Link>
-                  </li>
+              <li>
+                <Link
+                            href={route('profile.edit')}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                    route().current('profile.edit')
+                      ? 'bg-white bg-white text-black'
+                      : 'text-blue-100 hover:bg-white hover:bg-opacity-10 hover:text-white'
+                  }`}
+                >
+                  <UserPen size={20} color={route().current('profile.edit') ? '#0051AF' : '#FFFFFF'}/>
+                  <span className="font-medium text-sm">Profile</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  method="post"
+                            href={route('logout')}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-blue-100 hover:bg-white hover:bg-opacity-10 hover:text-white
+                  `}
+                >
+                  <LogOut size={20} color={'#FFFFFF'}/>
+                  <span className="font-medium text-sm">LogOut</span>
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
@@ -146,7 +146,6 @@ const Sidebar = ({
   );
 };
 
-// Sidebar Toggle Button Component
 const SidebarToggle = ({ isOpen, onToggle, isMobile = false }) => {
 
   return (
@@ -159,7 +158,6 @@ const SidebarToggle = ({ isOpen, onToggle, isMobile = false }) => {
   );
 };
 
-// Hook for sidebar state management
 const useSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

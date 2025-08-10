@@ -20,38 +20,46 @@ class MenuController extends Controller
     public function index()
     {
         $trees = $this->menuService->getHierarchyByOwnerId(auth()->user()->id);
-        return Inertia::render('Dashboard', [ 
+        return Inertia::render('Menu', [ 
             'trees' => $trees
         ]);
     }
 
     public function create(Request $request)
     {
-        dd($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        $this->menuService->createMenu($request->name, null, auth()->user()->id);
+        return back();
     }
 
-    public function store(StoreMenuRequest $request)
+    public function createChild(Request $request)
     {
-        //
+        $request->validate([
+            'parent_id' => 'required',
+            'name' => 'required|string|max:255',
+        ]);
+        $this->menuService->createMenu($request->name, $request->parent_id, auth()->user()->id);
+        return back();
     }
 
-    public function show(Menu $menu)
+    public function deleteMenu(Request $request)
     {
-        //
+        $request->validate([
+            'id' => 'required',
+        ]);
+        $this->menuService->deleteMenu($request->id);
+        return back();
     }
 
-    public function edit(Menu $menu)
+    public function updateMenu(Request $request)
     {
-        //
-    }
-
-    public function update(UpdateMenuRequest $request, Menu $menu)
-    {
-        //
-    }
-
-    public function destroy(Menu $menu)
-    {
-        //
+        $request->validate([
+            'id' => 'required',
+            'name' => 'required'
+        ]);
+        $this->menuService->updateMenu($request->id, $request->name);
+        return back();
     }
 }
