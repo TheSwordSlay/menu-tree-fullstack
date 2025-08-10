@@ -63,5 +63,16 @@ class DatabaseSeeder extends Seeder
             'parent_id' => $subMenu1_2->id,
             'name' => 'sub menu 1.1.2'
         ]);
+
+        $mainMenu2 = Menu::create([
+            'owner_id' => $testUser->id,
+            'parent_id' => null,
+            'name' => 'Main menu 2'
+        ]);
+        $subMenu2_1 = Menu::create([
+            'owner_id' => $testUser->id,
+            'parent_id' => $mainMenu2->id,
+            'name' => 'sub menu 1'
+        ]);
     }
 }

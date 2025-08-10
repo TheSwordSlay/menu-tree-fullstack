@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [] }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expandState }) => {
   const hasChildren = menu.children && menu.children.length > 0;
+
+  // --- THIS IS THE FIX ---
+  // Initialize the state based on the incoming expandState prop.
+  // If the 'expand' signal is true when this component is first rendered,
+  // it will start as expanded, instead of waiting for the useEffect hook.
+  const [isExpanded, setIsExpanded] = useState(
+    () => expandState?.expand === true && hasChildren
+  );
+
+  // The useEffect is still needed to handle changes, like the "Collapse All" signal,
+  // for components that are already visible on the screen.
+  useEffect(() => {
+    if (expandState && expandState.trigger > 0 && hasChildren) {
+      setIsExpanded(expandState.expand);
+    }
+  }, [expandState, hasChildren]);
 
   const toggleExpanded = () => {
     if (hasChildren) {
@@ -13,18 +28,27 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [] }) => 
 
   const renderConnectorLines = () => {
     const lines = [];
+    parentLines.forEach((shouldDrawLine, i) => {
+        if (shouldDrawLine) {
+            lines.push(
+                <div
+                    key={`parent-line-${i}`}
+                    className="absolute border-l border-gray-300"
+                    style={{
+                        left: `${i * 20 + 8}px`,
+                        top: 0,
+                        height: '100%',
+                    }}
+                />
+            );
+        }
+    });
     
     if (level > 0) {
       const connectorLeft = `${(level - 1) * 20 + 8}px`;
-      
-      // This is the vertical center of your row. 
-      // A row with text-sm and py-1 is ~28px tall, so the center is at 14px.
-      // You can adjust this value slightly if needed.
-      const verticalCenter = '14px'; 
-      
+      const verticalCenter = '14px';
       const connectorWidth = '12px';
 
-      // 1. The vertical part of the 'L' or 'T' shape
       lines.push(
         <div
           key="connector-v"
@@ -32,27 +56,23 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [] }) => 
           style={{
             left: connectorLeft,
             top: 0,
-            // If it's the last item, the line stops at the center (└).
-            // Otherwise, it continues down through the whole item (├).
             height: isLast ? verticalCenter : '100%',
           }}
         />
       );
 
-      // 2. The horizontal part of the connector
       lines.push(
         <div
           key="connector-h"
           className="absolute border-b border-gray-300"
           style={{
             left: connectorLeft,
-            top: verticalCenter, // Position it exactly at the vertical center
+            top: verticalCenter,
             width: connectorWidth,
           }}
         />
       );
     }
-
     return lines;
   };
 
@@ -61,22 +81,22 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [] }) => 
       {renderConnectorLines()}
       
       <div 
-        className="flex items-center py-1 px-2 hover:bg-gray-50 cursor-pointer relative z-10"
+        className="flex items-center py-1 px-2 hover:bg-gray-100 rounded-md cursor-pointer relative z-10"
         onClick={toggleExpanded}
         style={{ paddingLeft: `${level * 20 + (level > 0 ? 25 : 5)}px` }}
       >
         <div className="flex items-center min-w-0 flex-1">
           {hasChildren && (
-            <div className="flex items-center mr-1">
+            <div className="flex items-center mr-1 text-gray-500">
               {isExpanded ? (
-                <ChevronDown size={12} className="text-gray-600" />
+                <ChevronDown size={12} />
               ) : (
-                <ChevronRight size={12} className="text-gray-600" />
+                <ChevronRight size={12} />
               )}
             </div>
           )}
           
-          <span className="text-sm text-gray-800 select-none">
+          <span className="text-sm text-gray-800 select-none truncate">
             {menu.name}
           </span>
         </div>
@@ -95,6 +115,7 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [] }) => 
                 level={level + 1}
                 isLast={isChildLast}
                 parentLines={newParentLines}
+                expandState={expandState}
               />
             );
           })}
@@ -104,7 +125,7 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [] }) => 
   );
 };
 
-export default function MenuTree ({ menus = [] }) {
+export default function MenuTree ({ menus = [], expandState }) {
   return (
     <div className="w-80 bg-white border border-gray-200 rounded-sm shadow-sm">
       <div className="p-2">
@@ -113,6 +134,7 @@ export default function MenuTree ({ menus = [] }) {
             key={`${menu.name}-${index}`} 
             menu={menu}
             isLast={index === menus.length - 1}
+            expandState={expandState}
           />
         ))}
       </div>
