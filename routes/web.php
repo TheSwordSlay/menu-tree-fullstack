@@ -17,7 +17,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/menu', [MenuController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/menu', [MenuController::class, 'index'])->middleware(['auth', 'verified'])->name('menu');
+Route::post('/menu-create', [MenuController::class, 'create'])->middleware(['auth', 'verified'])->name('menu.create');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -3,11 +3,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import {LayoutGrid } from 'lucide-react';
 import { useForm, Head } from '@inertiajs/react'
 import UserLayout from '@/Layouts/UserLayout';
+import CreateMenuModal from '@/Components/CreateMenuModal';
 
 export default function Dashboard(props) {
     const [expandState, setExpandState] = useState({ expand: null, trigger: 0 });
     const [selectedMenu, setSelectedMenu] = useState(props.trees.length > 0 ? [props.trees[0]] : []);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [showCreateMenuModal, setShowCreateMenuModal] = useState(false);
+
+    const closeCreateMenuModal = () => {
+        setShowCreateMenuModal(false);
+    };
 
     const inputName = useRef(null);
 
@@ -78,6 +84,12 @@ export default function Dashboard(props) {
                     </div>
                     
                     <MenuTree menus={selectedMenu} expandState={expandState} setSelectedItem={setSelectedItem}/>
+                    <button
+                        className="w-full h-11 text-center bg-[#0051AF] text-white text-sm font-medium rounded-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0051AF] transition-all duration-150 ease-in-out"
+                        onClick={() => setShowCreateMenuModal(true)}
+                    >
+                        Create new menu
+                    </button>
                 </div>
                 <div>
                     <div className="mb-4">
@@ -122,6 +134,10 @@ export default function Dashboard(props) {
             </div>
         </div>
 
+        <CreateMenuModal
+            show={showCreateMenuModal}
+            onClose={closeCreateMenuModal}
+        />
         </UserLayout>
     );
 }

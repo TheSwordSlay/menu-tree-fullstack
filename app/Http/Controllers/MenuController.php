@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use App\Services\Menu\MenuService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Menu;
 
@@ -24,9 +25,9 @@ class MenuController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     public function store(StoreMenuRequest $request)
