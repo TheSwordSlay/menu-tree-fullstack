@@ -39,9 +39,13 @@ class MenuRepositoryImplement extends Eloquent implements MenuRepository{
         return $menu->childrens;
     }
 
-    public function createMenu(array $data)
+    public function createMenu(string $name, string $parentId, int $ownerId)
     {
-        return $this->model->create($data);
+        return $this->model->create([
+            'owner_id' => $ownerId,
+            'parent_id' => $parentId,
+            'name' => $name
+        ]);
     }
 
     public function updateMenu(int $id, array $data)

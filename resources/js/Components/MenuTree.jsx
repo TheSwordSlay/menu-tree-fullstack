@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expandState }) => {
+const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expandState, setSelectedItem, parentName=null }) => {
   const hasChildren = menu.children && menu.children.length > 0;
 
-  // --- THIS IS THE FIX ---
-  // Initialize the state based on the incoming expandState prop.
-  // If the 'expand' signal is true when this component is first rendered,
-  // it will start as expanded, instead of waiting for the useEffect hook.
   const [isExpanded, setIsExpanded] = useState(
     () => expandState?.expand === true && hasChildren
   );
 
-  // The useEffect is still needed to handle changes, like the "Collapse All" signal,
-  // for components that are already visible on the screen.
+  const handleClick = () => {
+    var dataSent = menu
+    dataSent['level'] = level 
+    if(parentName != null) {
+      dataSent['parent_name'] = parentName
+    }
+    setSelectedItem(dataSent)
+  }
+
   useEffect(() => {
     if (expandState && expandState.trigger > 0 && hasChildren) {
       setIsExpanded(expandState.expand);
@@ -21,7 +24,6 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
   }, [expandState, hasChildren]);
 
   const toggleExpanded = () => {
-    console.log(level);
     if (hasChildren) {
       setIsExpanded(!isExpanded);
     }
@@ -83,7 +85,7 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
       
       <div 
         className="flex items-center py-1 px-2 hover:bg-gray-100 rounded-md cursor-pointer relative z-10"
-        onClick={toggleExpanded}
+        onClick={() => { toggleExpanded(); handleClick(); }}
         style={{ paddingLeft: `${level * 20 + (level > 0 ? 25 : 5)}px` }}
       >
         <div className="flex items-center min-w-0 flex-1">
@@ -117,6 +119,8 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
                 isLast={isChildLast}
                 parentLines={newParentLines}
                 expandState={expandState}
+                setSelectedItem={setSelectedItem}
+                parentName={menu.name}
               />
             );
           })}
@@ -126,9 +130,9 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
   );
 };
 
-export default function MenuTree ({ menus = [], expandState }) {
+export default function MenuTree ({ menus = [], expandState, setSelectedItem }) {
   return (
-    <div className="w-80 bg-white border border-gray-200 rounded-sm shadow-sm">
+    <div className="w-80">
       <div className="p-2">
         {menus.map((menu, index) => (
           <MenuTreeItem 
@@ -136,6 +140,7 @@ export default function MenuTree ({ menus = [], expandState }) {
             menu={menu}
             isLast={index === menus.length - 1}
             expandState={expandState}
+            setSelectedItem={setSelectedItem}
           />
         ))}
       </div>

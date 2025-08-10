@@ -17,9 +17,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', [MenuController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/menu', [MenuController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard-test', [DashboardController::class, 'index'])->name('dashboard.test');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

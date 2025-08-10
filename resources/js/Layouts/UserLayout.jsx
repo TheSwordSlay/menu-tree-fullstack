@@ -1,19 +1,21 @@
 import { Sidebar, SidebarToggle, useSidebar } from '@/Components/Sidebar';
-import { Folder, Settings, LayoutGrid } from 'lucide-react';
+import { Folder, LayoutGrid } from 'lucide-react';
 
 export default function UserLayout({children, title}) {
     const { isOpen, isMobile, toggle } = useSidebar();
 
     const menuItems = [
-        { icon: Folder, label: 'Systems', active: false, href: '/dashboard', isGrouped: true },
-        { icon: LayoutGrid, label: 'System Code', active: false, href: '/dashboard', isGrouped: true },
-        { icon: LayoutGrid, label: 'Properties', active: false, onClick: () => handleProjectClick(), isGrouped: true },
-        { icon: LayoutGrid, label: 'Menus', active: true, href: '/settings', isGrouped: true },
-        { icon: LayoutGrid, label: 'APIList', active: false, onClick: () => handleProjectClick(), isGrouped: true },
-        { icon: Folder, label: 'Users & Group', active: false, href: '/settings', isGrouped: false },
-        { icon: Folder, label: 'Competition', active: false, href: '/settings', isGrouped: false },
-    ];
-
+        { icon: Folder, label: 'Systems', isGrouped: true },
+        { icon: LayoutGrid, label: 'System Code', isGrouped: true },
+        { icon: LayoutGrid, label: 'Properties', isGrouped: true },
+        { icon: LayoutGrid, label: 'Menus', href: '/menu', isGrouped: true },
+        { icon: LayoutGrid, label: 'APIList', isGrouped: true },
+        { icon: Folder, label: 'Users & Group', isGrouped: false },
+        { icon: Folder, label: 'Competition', isGrouped: false },
+    ].map(item => ({
+        ...item,
+        active: window.location.pathname === item.href
+    }));
     return( 
         <>
             <Sidebar 
