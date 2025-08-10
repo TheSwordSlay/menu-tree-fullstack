@@ -4,6 +4,7 @@ namespace App\Repositories\Menu;
 
 use LaravelEasyRepository\Implementations\Eloquent;
 use App\Models\Menu;
+use Illuminate\Support\Facades\Log;
 
 class MenuRepositoryImplement extends Eloquent implements MenuRepository{
 
@@ -31,7 +32,12 @@ class MenuRepositoryImplement extends Eloquent implements MenuRepository{
 
     public function getMenuChildrens(int $id)
     {
-        return $this->model->find($id)->childrens;
+        $menu = $this->model->find($id);
+        if (!$menu) {
+            Log::warning("Menu with ID {$id} not found when trying to get children");
+            return collect(); // Return empty collection instead of null
+        }
+        return $menu->childrens;
     }
 
     public function createMenu(array $data)

@@ -19,11 +19,11 @@ class Menu extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Parent::class);
+        return $this->belongsTo(Menu::class);
     }
 
     public function childrens()
     {
-        return $this->HasMany(Parent::class);
+        return $this->hasMany(Menu::class, 'parent_id');
     }
 }

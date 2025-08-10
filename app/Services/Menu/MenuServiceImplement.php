@@ -3,6 +3,7 @@
 namespace App\Services\Menu;
 
 use App\Models\Menu;
+use Illuminate\Support\Facades\Log;
 use LaravelEasyRepository\ServiceApi;
 use App\Repositories\Menu\MenuRepository;
 
@@ -35,24 +36,31 @@ class MenuServiceImplement extends ServiceApi implements MenuService{
     {
         $rootMenus = $this->mainRepository->getAllMenusByOwnerId($id);
         $menuHierarchies = [];
-
         foreach ($rootMenus as $menu) {
-            $menuHierarchies[] = $this->buildMenuTree($menu);
+            $menuHierarchies[] = $this->buildMenuTree($menu, []);
         }
 
         return $menuHierarchies;
     }
 
-    private function buildMenuTree(Menu $menu)
+    private function buildMenuTree(Menu $menu, array $processedIds = [])
     {
+        if (in_array($menu->id, $processedIds)) {
+            return $menu->toArray();
+        }
+        
+        $processedIds[] = $menu->id;
+        
         $children = $this->mainRepository->getMenuChildrens($menu->id);
-        $menu->children = [];
-
+        
+        $menuArray = $menu->toArray();
+        $menuArray['children'] = [];
+        
         foreach ($children as $child) {
-            $menu->children[] = $this->buildMenuTree($child);
+            $menuArray['children'][] = $this->buildMenuTree($child, $processedIds);
         }
 
-        return $menu;
+        return $menuArray;
     }
 
     public function getMenuById(int $id)

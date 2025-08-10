@@ -1,7 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import MenuTree from '@/Components/MenuTree';
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+    console.log(props.trees)
     return (
         <AuthenticatedLayout
             header={
@@ -16,7 +18,7 @@ export default function Dashboard() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            You're logged in!
+                            <MenuTree menus={props.trees}></MenuTree>
                         </div>
                     </div>
                 </div>

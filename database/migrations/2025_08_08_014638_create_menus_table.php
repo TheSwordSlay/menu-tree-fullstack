@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained('owner')->onDelete('cascade');
-            $table->foreignId('parent_id')->constrained('parent')->onDelete('cascade')->nullable();
+            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('parent_id')->nullable()->constrained('menus')->onDelete('cascade');
             $table->string('name');
-            $table->integer('depth');
             $table->timestamps();
         });
     }
@@ -29,3 +28,4 @@ return new class extends Migration
         Schema::dropIfExists('menus');
     }
 };
+
