@@ -16,52 +16,52 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        $testUser = User::factory()->create([
             'name' => 'Rizalul Fiqri',
             'email' => 'fiqrijambi@gmail.com',
             'password' => bcrypt('password'),
         ]);
 
-        Menu::create([
-            'owner_id' => 1,
+        $mainMenu1 = Menu::create([
+            'owner_id' => $testUser->id,
             'parent_id' => null,
             'name' => 'Main menu 1'
         ]);
 
-        Menu::create([
-            'owner_id' => 1,
-            'parent_id' => 1,
+        $subMenu1_1 = Menu::create([
+            'owner_id' => $testUser->id,
+            'parent_id' => $mainMenu1->id,
             'name' => 'sub menu 1'
         ]);
 
         Menu::create([
-            'owner_id' => 1,
-            'parent_id' => 1,
-            'name' => 'sub menu 1'
+            'owner_id' => $testUser->id,
+            'parent_id' => $mainMenu1->id,
+            'name' => 'sub menu 2'
         ]);
 
         Menu::create([
-            'owner_id' => 1,
-            'parent_id' => 1,
-            'name' => 'sub menu 1'
+            'owner_id' => $testUser->id,
+            'parent_id' => $mainMenu1->id,
+            'name' => 'sub menu 3'
+        ]);
+
+        $subMenu1_2 = Menu::create([
+            'owner_id' => $testUser->id,
+            'parent_id' => $subMenu1_1->id,
+            'name' => 'sub menu 1.1'
         ]);
 
         Menu::create([
-            'owner_id' => 1,
-            'parent_id' => 2,
-            'name' => 'sub menu 1'
+            'owner_id' => $testUser->id,
+            'parent_id' => $subMenu1_2->id,
+            'name' => 'sub menu 1.1.1'
         ]);
 
         Menu::create([
-            'owner_id' => 1,
-            'parent_id' => 3,
-            'name' => 'sub menu 1'
-        ]);
-
-        Menu::create([
-            'owner_id' => 1,
-            'parent_id' => 3,
-            'name' => 'sub menu 1'
+            'owner_id' => $testUser->id,
+            'parent_id' => $subMenu1_2->id,
+            'name' => 'sub menu 1.1.2'
         ]);
     }
 }

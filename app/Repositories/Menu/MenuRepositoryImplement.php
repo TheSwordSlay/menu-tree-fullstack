@@ -25,17 +25,16 @@ class MenuRepositoryImplement extends Eloquent implements MenuRepository{
         return $this->model->where('owner_id', $id)->whereNull('parent_id')->get();
     }
 
-    public function getMenuById(int $id)
+    public function getMenuByUUID(string $id)
     {
         return $this->model->find($id);
     }
 
-    public function getMenuChildrens(int $id)
+    public function getMenuChildrens(string $id)
     {
         $menu = $this->model->find($id);
         if (!$menu) {
-            Log::warning("Menu with ID {$id} not found when trying to get children");
-            return collect(); // Return empty collection instead of null
+            return collect();
         }
         return $menu->childrens;
     }

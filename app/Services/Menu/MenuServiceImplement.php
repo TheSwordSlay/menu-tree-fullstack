@@ -9,22 +9,8 @@ use App\Repositories\Menu\MenuRepository;
 
 class MenuServiceImplement extends ServiceApi implements MenuService{
 
-    /**
-     * set title message api for CRUD
-     * @param string $title
-     */
      protected string $title = "";
-     /**
-     * uncomment this to override the default message
-     * protected string $create_message = "";
-     * protected string $update_message = "";
-     * protected string $delete_message = "";
-     */
 
-     /**
-     * don't change $this->mainRepository variable name
-     * because used in extends service class
-     */
      protected MenuRepository $mainRepository;
 
     public function __construct(MenuRepository $mainRepository)
@@ -63,9 +49,9 @@ class MenuServiceImplement extends ServiceApi implements MenuService{
         return $menuArray;
     }
 
-    public function getMenuById(int $id)
+    public function getMenuByUUID(string $id)
     {
-        return $this->mainRepository->getMenuById($id);
+        return $this->mainRepository->getMenuByUUID($id);
     }
 
     public function createMenu(array $data)
@@ -74,13 +60,13 @@ class MenuServiceImplement extends ServiceApi implements MenuService{
         return $this->mainRepository->createMenu($data);
     }
 
-    public function updateMenu(int $id, array $data)
+    public function updateMenu(string $id, array $data)
     {
         // Add any business logic or validation here before updating
         return $this->mainRepository->updateMenu($id, $data);
     }
 
-    public function deleteMenu(int $id)
+    public function deleteMenu(string $id)
     {
         // Add any business logic or validation here before deleting
         return $this->mainRepository->deleteMenu($id);

@@ -7,8 +7,8 @@ use LaravelEasyRepository\BaseService;
 interface MenuService extends BaseService{
 
     public function getHierarchyByOwnerID(int $id);
-    public function getMenuById(int $id);
+    public function getMenuByUUID(string $id);
     public function createMenu(array $data);
-    public function updateMenu(int $id, array $data);
-    public function deleteMenu(int $id);
+    public function updateMenu(string $id, array $data);
+    public function deleteMenu(string $id);
 }
