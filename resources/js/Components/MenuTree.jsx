@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, CirclePlus, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Trash2 } from 'lucide-react';
 import CreateChildMenuModal from '@/Components/CreateChildMenuModal';
 import DeleteMenuModal from '@/Components/DeleteMenuModal';
 
@@ -121,13 +121,13 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
               className="ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full text-xs"
               onClick={(e) => { e.stopPropagation(); setShowCreateMenuModal(true); }}
               >
-              <CirclePlus size={20}></CirclePlus>
+              <Plus size={20} className='p-1'></Plus>
               </button> 
                       <button 
             className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full text-xs"
             onClick={(e) => { e.stopPropagation(); setShowCreateMenuModalDelete(true); }}
             >
-            <Trash2 size={20}></Trash2>
+            <Trash2 size={20} className="p-1"></Trash2>
             </button> 
           </>
             : ""}
