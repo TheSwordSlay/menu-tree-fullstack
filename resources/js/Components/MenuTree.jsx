@@ -21,6 +21,7 @@ const MenuTreeItem = ({ menu, level = 0, isLast = false, parentLines = [], expan
   }, [expandState, hasChildren]);
 
   const toggleExpanded = () => {
+    console.log(level);
     if (hasChildren) {
       setIsExpanded(!isExpanded);
     }
